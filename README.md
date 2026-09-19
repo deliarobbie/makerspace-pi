@@ -44,4 +44,14 @@ chmod +x setup.sh
   ```
 
 ## Hardware Wiring
-See [docs/wiring.txt](docs/wiring.txt) and [docs/gpio_pin_map.png](docs/gpio_pin_map.png) for traffic light pin connections.
+
+The traffic light plugs into 4 contiguous pins on the left (odd) side of the header (see [docs/gpio_pin_map.png](docs/gpio_pin_map.png)):
+
+| Traffic Light | BCM GPIO | Physical Pin | Header Location |
+| :--- | :--- | :--- | :--- |
+| **Yellow LED** | GPIO 10 | Pin 19 | 4th pin from Ground |
+| **Red LED** | GPIO 9 | Pin 21 | 3rd pin from Ground |
+| **Green LED** | GPIO 11 | Pin 23 | 2nd pin from Ground |
+| **GND (Ground)** | Ground | Pin 25 | Left side, Ground |
+
+Detailed notes available in [docs/wiring.txt](docs/wiring.txt).

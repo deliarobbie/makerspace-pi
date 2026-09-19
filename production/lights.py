@@ -1,7 +1,7 @@
 from gpiozero import LED
 
-red = LED(10)
-yellow = LED(9)
+red = LED(9)
+yellow = LED(10)
 green = LED(11)
 
 
