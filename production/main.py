@@ -24,11 +24,12 @@ def process_card(card_id):
         print("Status: RED (Access Denied / Unknown Card)")
         set_lights(True, False, False)
 
+        turn_off_lights()
 
 if __name__ == "__main__":
     print("Initializing RFID Traffic Controller...")
 
-    set_lights(False, False, False)  # Start with all lights off
+    turn_off_lights()  # Start with all lights off
 
     print("Ready! Scan an RFID card...")
 
@@ -38,4 +39,4 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("\nShutting down...")
-        set_lights(False, False, False)
+        turn_off_lights()

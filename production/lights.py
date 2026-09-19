@@ -1,4 +1,5 @@
 import warnings
+import time
 
 # Suppress fallback warnings when lgpio/RPi.GPIO are not installed in the venv
 try:
@@ -19,3 +20,9 @@ def set_lights(r_state, y_state, g_state):
     red.value = r_state
     yellow.value = y_state
     green.value = g_state
+
+def turn_off_lights():
+    time.sleep(2) # give it time to display to user
+    red.value = False
+    yellow.value = False
+    green.value = False
