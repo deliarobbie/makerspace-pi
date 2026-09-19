@@ -1,3 +1,12 @@
+import warnings
+
+# Suppress fallback warnings when lgpio/RPi.GPIO are not installed in the venv
+try:
+    from gpiozero.exc import PinFactoryFallback
+    warnings.filterwarnings("ignore", category=PinFactoryFallback)
+except ImportError:
+    pass
+
 from gpiozero import LED
 
 red = LED(9)
