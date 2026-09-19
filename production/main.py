@@ -1,4 +1,4 @@
-from lights import set_lights
+from lights import set_lights, turn_off_lights
 from rfid_reader import start_reader
 
 
