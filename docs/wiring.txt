@@ -1,0 +1,16 @@
+Traffic Light Pin Connections
+Refer to docs/gpio_pin_map.png for physical pin locations.
+
+Connection Mapping:
+------------------------------------------------------
+Traffic Light   | BCM GPIO   | Physical Pin Number
+------------------------------------------------------
+Red LED         | GPIO 8     | Pin 24
+Yellow LED      | GPIO 7     | Pin 26
+Green LED       | GPIO 25    | Pin 22
+GND (Ground)    | Ground     | Pin 20 (or Pin 25)
+------------------------------------------------------
+
+Note:
+The numbers in production/lights.py (LED(8), LED(7), LED(25))
+use BCM GPIO numbering, matching the GPIO labels in the diagram.

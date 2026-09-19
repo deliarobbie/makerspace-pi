@@ -1,8 +1,8 @@
 from gpiozero import LED
 
-green = LED(25)
-yellow = LED(7)
-red = LED(8)
+red = LED(10)
+yellow = LED(9)
+green = LED(11)
 
 
 def set_lights(r_state, y_state, g_state):
