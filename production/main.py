@@ -24,7 +24,7 @@ def process_card(card_id):
         print("Status: RED (Access Denied / Unknown Card)")
         set_lights(True, False, False)
 
-        turn_off_lights()
+    turn_off_lights()
 
 if __name__ == "__main__":
     print("Initializing RFID Traffic Controller...")
