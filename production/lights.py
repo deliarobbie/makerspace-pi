@@ -5,6 +5,8 @@ import time
 try:
     from gpiozero.exc import PinFactoryFallback
     warnings.filterwarnings("ignore", category=PinFactoryFallback)
+    from gpiozero.exc import NativePinFactoryFallback
+    warnings.filterwarnings("ignore", category=NativePinFactoryFallback)
 except ImportError:
     pass
 
