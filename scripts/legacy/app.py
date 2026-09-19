@@ -1,5 +1,5 @@
 from dash import Dash, html, dcc, Input, Output, callback
-from script import type_hex 
+from scripts.legacy.script import type_hex 
 import webbrowser
 import time
 
