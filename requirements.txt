@@ -1,2 +1,4 @@
 gpiozero>=2.0
 keyboard>=0.13.5
+requests>=2.31
+python-dotenv>=1.0

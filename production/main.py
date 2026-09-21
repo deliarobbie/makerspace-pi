@@ -1,11 +1,20 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from lights import set_lights, turn_off_lights
 from rfid_reader import start_reader
+from database import lookup_card
 
 
 def process_card(card_id):
     card_id = card_id.lower().strip()
 
     print(f"Card scanned: {card_id}")
+
+    # Early testing: send the scan to the webapp too, just to prove the
+    # Pi <-> Vercel connection works. Doesn't control the lights yet.
+    lookup_card(card_id)
 
     # Logic based on card input:
     # 44171ddc -> Yellow
