@@ -30,6 +30,12 @@ chmod +x setup.sh
    pip install -r requirements.txt
    ```
 
+3. **Configure environment variables:**
+   ```bash
+   cp .env.example .env
+   nano .env  # set MAKERSPACE_API_URL and MAKERSPACE_API_KEY
+   ```
+
 ## Running the Application
 
 - **Raspberry Pi:**
