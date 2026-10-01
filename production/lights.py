@@ -39,4 +39,5 @@ def blink_error():
     for i in range(3):
         set_lights_quick(True, False, False)
         time.sleep(.5)
-        turn_off_lights()        
+        turn_off_lights()
+        time.sleep(.5)
