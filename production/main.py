@@ -9,7 +9,7 @@ try:
 except ImportError:
     pass
 
-from lights import set_lights, turn_off_lights
+from lights import set_lights, turn_off_lights, blink_error
 from rfid_reader import start_reader
 from database import lookup_card
 
@@ -45,16 +45,17 @@ def process_card(card_id):
 
     else:
         # Fallback if the webapp cannot be reached (offline mode)
-        print("Notice: Webapp unreachable. Running offline card check...")
-        if card_id == "44171ddc":
-            print("Status: YELLOW (Offline Match)")
-            set_lights(False, True, False)
-        elif card_id in ("b34a339c", "b35dec2c"):
-            print("Status: GREEN (Offline Match)")
-            set_lights(False, False, True)
-        else:
-            print("Status: RED (Offline - Access Denied)")
-            set_lights(True, False, False)
+        print("Notice: Webapp unreachable")
+        blink_error()
+        # if card_id == "44171ddc":
+        #     print("Status: YELLOW (Offline Match)")
+        #     set_lights(False, True, False)
+        # elif card_id in ("b34a339c", "b35dec2c"):
+        #     print("Status: GREEN (Offline Match)")
+        #     set_lights(False, False, True)
+        # else:
+        #     print("Status: RED (Offline - Access Denied)")
+        #     set_lights(True, False, False)
 
     turn_off_lights()
 
