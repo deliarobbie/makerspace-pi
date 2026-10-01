@@ -31,6 +31,8 @@ def lookup_card(card_id):
             headers=headers,
             timeout=TIMEOUT_SECONDS,
         )
+        if not response.ok:
+            print(f"Check-in API returned {response.status_code}: {response.text}")
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:

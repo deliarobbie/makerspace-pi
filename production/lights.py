@@ -29,7 +29,6 @@ def set_lights_quick(r_state, y_state, g_state):
     red.value = r_state
     yellow.value = y_state
     green.value = g_state
-    time.sleep(2) # give it time to display to user
 
 def turn_off_lights():
     red.value = False
