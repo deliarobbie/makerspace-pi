@@ -104,7 +104,7 @@ After=network-online.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory="$PROJECT_DIR"
+WorkingDirectory=$PROJECT_DIR
 ExecStart="$PROJECT_DIR/.venv/bin/python" -u "$PROJECT_DIR/production/main.py"
 Restart=on-failure
 RestartSec=5
@@ -113,9 +113,17 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 sudo chmod 644 "/etc/systemd/system/$SERVICE_NAME"
+if ! sudo systemd-analyze verify "/etc/systemd/system/$SERVICE_NAME"; then
+    echo "Service definition failed validation; see the errors above."
+    exit 1
+fi
 sudo systemctl daemon-reload
 sudo systemctl enable "$SERVICE_NAME"
-sudo systemctl restart "$SERVICE_NAME"
+if ! sudo systemctl restart "$SERVICE_NAME"; then
+    sudo systemctl status "$SERVICE_NAME" --no-pager --full || true
+    sudo journalctl -u "$SERVICE_NAME" -n 30 --no-pager
+    exit 1
+fi
 sleep 2
 if ! sudo systemctl is-active --quiet "$SERVICE_NAME"; then
     echo "Service is not running. Recent logs:"
