@@ -90,10 +90,8 @@ PY
 echo "Stop any manually running production/main.py before continuing."
 read -r -p "Press Enter once the manual process is stopped..." _confirmation
 
-# Stop an existing service before reinstalling its definition.
-if sudo systemctl cat "$SERVICE_NAME" >/dev/null 2>&1; then
-    sudo systemctl stop "$SERVICE_NAME"
-fi
+# Install and validate the definition before reloading systemd. The restart
+# below stops an existing instance or starts the service on first installation.
 
 sudo tee "/etc/systemd/system/$SERVICE_NAME" >/dev/null <<EOF
 [Unit]
