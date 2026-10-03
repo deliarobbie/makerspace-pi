@@ -6,9 +6,41 @@ RFID card reader and LED traffic light controller for the makerspace.
 
 ### Raspberry Pi (One-Step Script)
 ```bash
-chmod +x setup.sh
-./setup.sh
+bash setup.sh
 ```
+
+Run this on the Pi as your normal user, not with `sudo bash`. Connect the reader
+and lights and ensure network access first. The installer requests sudo access,
+installs dependencies, prompts for missing API URL/key values, and saves them in
+`.env` with restricted permissions. Obtain these values from your administrator;
+the URL must include `/api/checkin`. Existing values are preserved on reruns.
+
+Stop any manually running `production/main.py` when prompted. Setup installs and
+enables `makerspace-rfid.service`, using the actual installation path. The current
+`keyboard` library requires the service to run as root. No reader device variable
+is needed for this implementation. Setup does not install a dedicated device reader
+or provide USB reconnect recovery.
+
+### Verify automatic startup
+
+1. Check `sudo systemctl status makerspace-rfid.service` and view logs with
+   `sudo journalctl -u makerspace-rfid.service -f`.
+2. Scan a known card and confirm the expected LEDs and check-in result.
+3. Close the terminal or disconnect SSH and scan again.
+4. Run `sudo reboot`; scan after boot before logging in. Inspect boot logs with
+   `sudo journalctl -u makerspace-rfid.service -b --no-pager` if needed.
+
+A running service alone does not verify the hardware. Ctrl+C exits the log viewer
+without stopping the service. For manual testing, first run
+`sudo systemctl stop makerspace-rfid.service` to avoid duplicate scans. Resume with
+`sudo systemctl start makerspace-rfid.service`. After code or `.env` changes, use
+`sudo systemctl restart makerspace-rfid.service`. To remove boot startup, use
+`sudo systemctl disable --now makerspace-rfid.service`.
+
+The current program only handles Ctrl+C cleanup; clean service shutdown and reader
+reconnection remain separate improvements. To change API settings, edit `.env`
+and restart the service. Never commit that file or share logs containing card IDs
+and names outside the intended administration team.
 
 ---
 
