@@ -53,11 +53,11 @@ from dotenv import dotenv_values, set_key
 
 path = Path(".env")
 values = dotenv_values(path) if path.exists() else {}
-with open("/dev/tty", "r+") as terminal:
+with open("/dev/tty", "r") as terminal_input, open("/dev/tty", "w", buffering=1) as terminal_output:
     def prompt(message):
-        terminal.write(message)
-        terminal.flush()
-        value = terminal.readline()
+        terminal_output.write(message)
+        terminal_output.flush()
+        value = terminal_input.readline()
         if not value:
             raise SystemExit("Setup cancelled: no input received.")
         return value.strip()
@@ -70,14 +70,14 @@ with open("/dev/tty", "r+") as terminal:
             if parsed.scheme in ("http", "https") and parsed.hostname:
                 updates["MAKERSPACE_API_URL"] = url
                 break
-            terminal.write("Enter a complete HTTP or HTTPS URL.\n")
+            terminal_output.write("Enter a complete HTTP or HTTPS URL.\n")
     if not values.get("MAKERSPACE_API_KEY"):
         while True:
-            key = getpass.getpass("API key (hidden): ", stream=terminal).strip()
+            key = getpass.getpass("API key (hidden): ", stream=terminal_output).strip()
             if key:
                 updates["MAKERSPACE_API_KEY"] = key
                 break
-            terminal.write("An API key is required.\n")
+            terminal_output.write("An API key is required.\n")
 
     if not path.exists():
         path.touch(mode=0o600, exist_ok=False)
