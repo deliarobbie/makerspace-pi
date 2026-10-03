@@ -7,11 +7,15 @@ last_keypress = 0
 TIMEOUT = 0.1  # Seconds between keystrokes before resetting the buffer
 
 
-def start_reader(callback):
+def start_reader(callback, on_ready=None):
     global buffer, last_keypress
+    accepting_cards = False
 
     def on_key(event):
         global buffer, last_keypress
+
+        if not accepting_cards:
+            return
 
         now = time.time()
 
@@ -34,7 +38,14 @@ def start_reader(callback):
                 buffer.append(event.name)
 
     # Hook the keyboard event listener
-    keyboard.hook(on_key)
-
-    # Keep the reader running
-    keyboard.wait()
+    hook = keyboard.hook(on_key)
+    try:
+        if on_ready is not None:
+            on_ready()
+        buffer.clear()
+        last_keypress = 0
+        accepting_cards = True
+        # Keep the reader running
+        keyboard.wait()
+    finally:
+        keyboard.unhook(hook)

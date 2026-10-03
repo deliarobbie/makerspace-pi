@@ -9,7 +9,7 @@ try:
 except ImportError:
     pass
 
-from lights import set_lights, turn_off_lights, blink_error
+from lights import set_lights, turn_off_lights, blink_error, confirm_startup
 from rfid_reader import start_reader
 from database import lookup_card
 
@@ -60,16 +60,19 @@ def process_card(card_id):
     turn_off_lights()
 
 
+def reader_ready():
+    confirm_startup()
+    print("Ready! Scan an RFID card...")
+
+
 if __name__ == "__main__":
     print("Initializing RFID Traffic Controller...")
 
     turn_off_lights()  # Start with all lights off
 
-    print("Ready! Scan an RFID card...")
-
     try:
         # Start RFID reader
-        start_reader(process_card)
+        start_reader(process_card, on_ready=reader_ready)
 
     except KeyboardInterrupt:
         print("\nShutting down...")
