@@ -47,7 +47,7 @@ def confirm_startup():
     """Repeat R-Y-G-R-Y-G three times, then blink all LEDs twice."""
     sequence = ((True, False, False), (False, True, False), (False, False, True))
     try:
-        for _ in range(3):
+        for _ in range(2):
             for states in sequence * 2:
                 set_lights_quick(*states)
                 time.sleep(.1)
