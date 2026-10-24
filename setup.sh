@@ -87,7 +87,14 @@ with open("/dev/tty", "r") as terminal_input, open("/dev/tty", "w", buffering=1)
 print("API configuration ready; existing values preserved.")
 PY
 
-echo "Stop any manually running production/main.py before continuing."
+.venv/bin/python scripts/configure_role.py
+CHECKIN_MODE="$(.venv/bin/python -c 'from dotenv import dotenv_values; print(dotenv_values(".env")["MAKERSPACE_MODE"])')"
+case "$CHECKIN_MODE" in
+    space|equipment|studio) ENTRY_SCRIPT="${CHECKIN_MODE}_checkin.py" ;;
+    *) echo "Invalid check-in mode"; exit 1 ;;
+esac
+
+echo "Stop any manually running check-in script before continuing."
 read -r -p "Press Enter once the manual process is stopped..." _confirmation
 
 # Install and validate the definition before reloading systemd. The restart
@@ -103,7 +110,7 @@ After=network-online.target
 Type=simple
 User=root
 WorkingDirectory=$PROJECT_DIR
-ExecStart="$PROJECT_DIR/.venv/bin/python" -u "$PROJECT_DIR/production/main.py"
+ExecStart="$PROJECT_DIR/.venv/bin/python" -u "$PROJECT_DIR/production/$ENTRY_SCRIPT"
 Restart=on-failure
 RestartSec=5
 

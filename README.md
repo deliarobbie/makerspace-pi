@@ -15,6 +15,42 @@ installs dependencies, prompts for missing API URL/key values, and saves them in
 `.env` with restricted permissions. Obtain these values from your administrator;
 the URL must include `/api/checkin`. Existing values are preserved on reruns.
 
+### Choose this Pi's role
+
+Deploy the web application's RFID endpoints before configuring Equipment or Studio
+mode. All three roles use the same reader, wiring, and lights:
+
+| Role | Entry script | Access requirement |
+| --- | --- | --- |
+| Space | `production/space_checkin.py` | ACTIVE general membership; records the latest space check-in |
+| Equipment | `production/equipment_checkin.py` | ACTIVE membership and a current booking for the assigned machine |
+| Studio | `production/studio_checkin.py` | ACTIVE membership and a current, non-cancelled rental for the assigned studio |
+
+`bash setup.sh` prompts for a role. Equipment and Studio show a menu of names and
+database IDs fetched from the website using the API key. Choose one resource;
+setup saves `MAKERSPACE_MODE` and `MAKERSPACE_RESOURCE_ID` in the Pi's `.env` and
+points `makerspace-rfid.service` at the matching script. Rerun setup to keep or
+change an assignment. A failed menu request leaves the existing assignment and
+service unchanged; check the API deployment, key, and resource catalog, then rerun.
+
+Keep `MAKERSPACE_API_URL` set to the full Space endpoint, such as
+`https://your-site/api/checkin`. Other endpoints are derived from that URL's origin:
+`/api/rfid/resources`, `/api/checkin/equipment`, and `/api/checkin/studio`.
+The new endpoints require the same `MAKERSPACE_API_KEY` on the website and Pi.
+
+Reservation access begins exactly at the start time and ends at the end time
+(end excluded), using America/New_York business time. Studio renters may scan
+repeatedly during their rental. Equipment/Studio checks do not record visits or
+update space check-ins. General membership eligibility uses status, not membership
+dates or waiver status. No lock, relay, or machine power control is provided.
+`production/main.py` remains a Space entry point for older installations.
+
+After setup, test an ACTIVE card with a current reservation, a card without one,
+an INACTIVE member, and a reservation for a different resource. Check exact start
+and end times, a cancelled studio rental, and an API/network outage (error blink).
+Repeat after disconnecting SSH and after reboot. Logs show the role/resource at
+startup and the decision for each scan.
+
 Stop any manually running `production/main.py` when prompted. Setup installs and
 enables `makerspace-rfid.service`, using the actual installation path. The current
 `keyboard` library requires the service to run as root. No reader device variable
