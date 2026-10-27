@@ -39,11 +39,18 @@ def configure(path, read, write):
         resources = response.json().get("resources")
         if not isinstance(resources, list) or not resources:
             raise ValueError("No resources available")
+        rows = []
         for index, resource in enumerate(resources, 1):
             if not isinstance(resource, dict) or not str(resource.get("id", "")).isascii() or not str(resource.get("id", "")).isdecimal() or int(resource["id"]) <= 0:
                 raise ValueError("Invalid resource menu response")
-            write(f"{index}) {resource.get('name') or 'Unnamed'} (ID {resource['id']})\n")
-        selected = resources[choose("Resource: ", len(resources), read, write)]
+            rows.append((str(index), resource.get('name') or 'Unnamed', resource.get('type') or 'Unspecified', str(resource['id'])))
+        label = "Machine" if mode == "equipment" else "Studio"
+        headers = ("#", label, "Type", "ID")
+        widths = [max(len(str(row[column])) for row in [headers, *rows]) for column in range(4)]
+        write(f"\n{mode.upper()} CHECK-IN\n")
+        for row in [headers, tuple("-" * width for width in widths), *rows]:
+            write("  ".join(str(value).ljust(width) for value, width in zip(row, widths)).rstrip() + "\n")
+        selected = resources[choose(f"Select a {label.lower()}: ", len(resources), read, write)]
         resource_id = str(selected["id"])
     path.chmod(0o600)
     set_key(str(path), "MAKERSPACE_MODE", mode)
