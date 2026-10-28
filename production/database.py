@@ -9,7 +9,7 @@ load_dotenv(os.path.join(_project_root, ".env"))
 
 # This file bridges the Pi to the webapp (hosted on Vercel), which owns the
 # actual database lookup. The Pi never talks to Postgres/Railway directly.
-API_URL = os.environ.get("MAKERSPACE_API_URL", "https://makerspacewebapplication.vercel.app:3000/api/checkin")
+API_URL = os.environ.get("MAKERSPACE_API_URL", "https://makerspacewebapplication.vercel.app/api/checkin")
 API_KEY = os.environ.get("MAKERSPACE_API_KEY", "")
 
 TIMEOUT_SECONDS = 5
