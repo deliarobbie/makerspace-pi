@@ -26,8 +26,9 @@ mode. All three roles use the same reader, wiring, and lights:
 | Equipment | `production/equipment_checkin.py` | ACTIVE membership and a current booking for the assigned machine |
 | Studio | `production/studio_checkin.py` | ACTIVE membership and a current, non-cancelled rental for the assigned studio |
 
-`bash setup.sh` prompts for a role. Equipment and Studio show a menu of names and
-database IDs fetched from the website using the API key. Choose one resource;
+`bash setup.sh` prompts for a role. Equipment and Studio show a table of names,
+types, and database IDs fetched from the website using the API key. Missing types
+display as "Unspecified". Choose a resource by its menu number;
 setup saves `MAKERSPACE_MODE` and `MAKERSPACE_RESOURCE_ID` in the Pi's `.env` and
 points `makerspace-rfid.service` at the matching script. Rerun setup to keep or
 change an assignment. A failed menu request leaves the existing assignment and
